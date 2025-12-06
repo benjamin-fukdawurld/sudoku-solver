@@ -11,7 +11,7 @@ import {
   getAllPossibleValues,
   getAllUniquePossibilities,
   getSinglePossibilities,
-} from "../ai/utils";
+} from "../engine/ai/utils";
 
 export function useSudoku() {
   const context = useContext(SudokuContext);

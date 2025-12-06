@@ -3,7 +3,7 @@ import { reduce } from "./array-utils";
 
 export function missingValues(
   sudoku: SudokuArray,
-  generator: Generator<number, void, void>
+  generator: Iterable<number>
 ): number[] {
   const missing = new Set<number>([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
@@ -19,7 +19,7 @@ export function missingValues(
 
 export function missingIndices(
   sudoku: SudokuArray,
-  generator: Generator<number, void, void>
+  generator: Iterable<number>
 ): number[] {
   return reduce<number[]>(
     sudoku,
@@ -37,7 +37,7 @@ export function missingIndices(
 
 export function missingCount(
   sudoku: SudokuArray,
-  generator: Generator<number, void, void>
+  generator: Iterable<number>
 ): number {
   return reduce<number>(
     sudoku,

@@ -1,16 +1,16 @@
-import type SudokuArray from "../engine/SudokuArray";
+import type SudokuArray from "../SudokuArray";
 import {
   SudokuValueFlags,
   SudokuValueFlagSet,
   SudokuValueFlagsValues,
-} from "../engine/types";
+} from "../types";
 import {
   colIndexGenerator,
   getSquareIndex,
   rowIndexGenerator,
   squareIndexGenerator,
   sudokuIndexToRowCol,
-} from "../engine/utils";
+} from "../utils";
 import {
   getAllPossibilities,
   getAllSinglePossibilities,
@@ -18,7 +18,7 @@ import {
   getIndexPossibilities,
   getIndexUniquePossibilities,
   possibleValuesToArray,
-} from "../engine/utils/possibilities";
+} from "../utils/possibilities";
 
 export default class PossibilityMap {
   public _possibilities: Uint16Array;

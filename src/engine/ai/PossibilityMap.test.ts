@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import PossibilityMap from "./PossibilityMap";
-import SudokuArray from "../engine/SudokuArray";
-import { SudokuValueFlags } from "../engine/types";
+import SudokuArray from "../SudokuArray";
+import { SudokuValueFlags } from "../types";
 
 describe("PossibilityMap", () => {
   let sudokuArray: SudokuArray;

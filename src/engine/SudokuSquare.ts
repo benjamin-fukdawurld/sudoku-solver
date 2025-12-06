@@ -1,81 +1,74 @@
+import type SudokuArray from "./SudokuArray";
 import type { SudokuChecker, SudokuSubGrid } from "./types";
 import {
-  isComplete,
-  isValid,
+  isSubGridComplete,
+  isSubGridSolved,
   missingCount,
   missingIndices,
   missingValues,
+  squareIndexGenerator,
 } from "./utils";
 
 export default class SudokuSquare implements SudokuSubGrid, SudokuChecker {
-  private data: DataView;
-
+  public sudokuArray: SudokuArray;
   public squareIndex: number;
 
-  constructor(buffer: ArrayBufferLike, squareIndex: number) {
-    this.data = new DataView(buffer);
+  constructor(sudokuArray: SudokuArray, squareIndex: number) {
+    this.sudokuArray = sudokuArray;
     this.squareIndex = squareIndex;
   }
 
-  private get squarePosition(): { row: number; col: number } {
-    const row = Math.floor(this.squareIndex / 3) * 3;
-    const col = (this.squareIndex % 3) * 3;
-
-    return { row, col };
-  }
-
-  private getCellPosition(localIndex: number): { row: number; col: number } {
-    const { row, col } = this.squarePosition;
-
-    return {
-      row: row + Math.floor(localIndex / 3),
-      col: col + (localIndex % 3),
-    };
-  }
-
-  private positionToIndex(row: number, col: number): number {
-    return row * 9 + col;
-  }
-
-  private getCellIndex(localIndex: number): number {
-    const { row, col } = this.getCellPosition(localIndex);
-    return this.positionToIndex(row, col);
-  }
-
   get(index: number): number {
-    const cellIndex = this.getCellIndex(index);
-    return this.data.getInt8(cellIndex);
+    const offset =
+      Math.floor(this.squareIndex / 3) * 27 + (this.squareIndex % 3) * 3;
+
+    return this.sudokuArray.get(offset + index);
   }
 
   set(index: number, value: number): this {
-    const cellIndex = this.getCellIndex(index);
-    this.data.setInt8(cellIndex, value);
+    const offset =
+      Math.floor(this.squareIndex / 3) * 27 + (this.squareIndex % 3) * 3;
+
+    this.sudokuArray.set(offset + index, value);
     return this;
   }
 
   get indices(): number[] {
-    return Array.from({ length: 9 }).map((_, localIndex) =>
-      this.getCellIndex(localIndex)
-    );
+    return Array.from(squareIndexGenerator(this.squareIndex));
   }
 
   get isValid(): boolean {
-    return isValid(this);
+    return isSubGridSolved(
+      this.sudokuArray,
+      squareIndexGenerator(this.squareIndex)
+    );
   }
 
   get isComplete(): boolean {
-    return isComplete(this);
+    return isSubGridComplete(
+      this.sudokuArray,
+      squareIndexGenerator(this.squareIndex)
+    );
   }
 
   get missingValues(): number[] {
-    return missingValues(this);
+    return missingValues(
+      this.sudokuArray,
+      squareIndexGenerator(this.squareIndex)
+    );
   }
 
   get missingIndices(): number[] {
-    return missingIndices(this);
+    return missingIndices(
+      this.sudokuArray,
+      squareIndexGenerator(this.squareIndex)
+    );
   }
 
   get missingCount(): number {
-    return missingCount(this);
+    return missingCount(
+      this.sudokuArray,
+      squareIndexGenerator(this.squareIndex)
+    );
   }
 }

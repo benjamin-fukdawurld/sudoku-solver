@@ -26,6 +26,24 @@ export function* squareIndexGenerator(
   }
 }
 
+export function* allIndicesGenerator(
+  type: "row" | "col" | "square" = "row"
+): Generator<number, void, void> {
+  if (type === "row") {
+    for (let index = 0; index < 81; index++) {
+      yield index;
+    }
+
+    return;
+  }
+
+  const generator = type === "col" ? colIndexGenerator : squareIndexGenerator;
+  const indices = Array.from({ length: 9 }, (_, i) => [...generator(i)]).flat();
+  for (const i of indices) {
+    yield i;
+  }
+}
+
 export function makeSubGridIterator(
   index: number,
   generator: (index: number) => Generator<number, void, void>
@@ -55,4 +73,16 @@ export function makeSquareIterator(
   squareIndex: number
 ): Iterator<number, void, void> & Iterable<number> {
   return makeSubGridIterator(squareIndex, squareIndexGenerator);
+}
+
+export function makeAllIndicesIterator(
+  type: "row" | "col" | "square" = "row"
+): Iterator<number, void, void> & Iterable<number> {
+  const gen = allIndicesGenerator(type);
+  return {
+    next: () => gen.next(),
+    [Symbol.iterator]() {
+      return this;
+    },
+  };
 }

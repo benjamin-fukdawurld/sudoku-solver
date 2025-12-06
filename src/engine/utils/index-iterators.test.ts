@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  allIndicesGenerator,
   colIndexGenerator,
+  makeAllIndicesIterator,
   makeColIterator,
   makeRowIterator,
   makeSquareIterator,
@@ -63,6 +65,20 @@ describe("index iterators and generators", () => {
     ]);
   });
 
+  it("allIndicesGenerator", () => {
+    expect(Array.from(allIndicesGenerator())).toEqual(
+      Array.from({ length: 81 }, (_, i) => i)
+    );
+
+    expect(Array.from(allIndicesGenerator("col"))).toEqual(
+      Array.from({ length: 9 }, (_, i) => [...colIndexGenerator(i)]).flat()
+    );
+
+    expect(Array.from(allIndicesGenerator("square"))).toEqual(
+      Array.from({ length: 9 }, (_, i) => [...squareIndexGenerator(i)]).flat()
+    );
+  });
+
   describe("makeRowIterator", () => {
     it("should create an iterator for the given row", () => {
       expect(Array.from(makeRowIterator(0))).toEqual([
@@ -111,5 +127,19 @@ describe("index iterators and generators", () => {
         6, 7, 8, 15, 16, 17, 24, 25, 26,
       ]);
     });
+  });
+
+  it("makeAllIndicesIterator", () => {
+    expect(Array.from(makeAllIndicesIterator())).toEqual(
+      Array.from({ length: 81 }, (_, i) => i)
+    );
+
+    expect(Array.from(makeAllIndicesIterator("col"))).toEqual(
+      Array.from({ length: 9 }, (_, i) => [...colIndexGenerator(i)]).flat()
+    );
+
+    expect(Array.from(makeAllIndicesIterator("square"))).toEqual(
+      Array.from({ length: 9 }, (_, i) => [...squareIndexGenerator(i)]).flat()
+    );
   });
 });

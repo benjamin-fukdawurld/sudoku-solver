@@ -3,7 +3,7 @@ import type SudokuArray from "../SudokuArray";
 export function every(
   sudoku: SudokuArray,
   predicate: (value: number, index: number, sudoku: SudokuArray) => boolean,
-  generator?: Generator<number, void, void>
+  generator?: Iterable<number>
 ): boolean {
   const indexGen =
     generator ?? Array.from({ length: 81 }, (_, i) => i).values();
@@ -20,7 +20,7 @@ export function fill(
   sudoku: SudokuArray,
   value: number,
   options?: {
-    generator?: Generator<number, void, void>;
+    generator?: Iterable<number>;
     start?: number;
     end?: number;
   }
@@ -47,7 +47,7 @@ export function fill(
 export function filter(
   sudoku: SudokuArray,
   predicate: (value: number, index: number, sudoku: SudokuArray) => boolean,
-  generator?: Generator<number, void, void>
+  generator?: Iterable<number>
 ): number[] {
   const result: number[] = [];
   const indexGen =
@@ -63,7 +63,7 @@ export function filter(
 export function some(
   sudoku: SudokuArray,
   predicate: (value: number, index: number, sudoku: SudokuArray) => boolean,
-  generator?: Generator<number, void, void>
+  generator?: Iterable<number>
 ): boolean {
   const indexGen =
     generator ?? Array.from({ length: 81 }, (_, i) => i).values();
@@ -78,7 +78,7 @@ export function some(
 export function map<T>(
   sudoku: SudokuArray,
   callback: (value: number, index: number, sudoku: SudokuArray) => T,
-  generator?: Generator<number, void, void>
+  generator?: Iterable<number>
 ): T[] {
   const result: T[] = [];
   const indexGen =
@@ -92,7 +92,7 @@ export function map<T>(
 export function forEach(
   sudoku: SudokuArray,
   callback: (value: number, index: number, sudoku: SudokuArray) => void,
-  generator?: Generator<number, void, void>
+  generator?: Iterable<number>
 ): void {
   const indexGen =
     generator ?? Array.from({ length: 81 }, (_, i) => i).values();
@@ -110,7 +110,7 @@ export function reduce<T>(
     sudoku: SudokuArray
   ) => T,
   initialValue: T,
-  generator?: Generator<number, void, void>
+  generator?: Iterable<number>
 ): T {
   let accumulator = initialValue;
   const indexGen =

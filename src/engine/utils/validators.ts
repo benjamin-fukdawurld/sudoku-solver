@@ -4,7 +4,7 @@ import { colIndexGenerator, rowIndexGenerator } from "./index-iterators";
 
 export function isSubGridInvalid(
   sudokuArray: SudokuArray,
-  indices: Generator<number, void, void>
+  indices: Iterable<number>
 ): boolean {
   const seen = new Set<number>();
   return some(
@@ -27,16 +27,23 @@ export function isSubGridInvalid(
 
 export function isSubGridSolved(
   sudokuArray: SudokuArray,
-  indices: Generator<number, void, void>
+  indices: Iterable<number>
 ): boolean {
   return !isSubGridInvalid(sudokuArray, indices);
 }
 
 export function isSubGridIncomplete(
   sudokuArray: SudokuArray,
-  indices: Generator<number, void, void>
+  indices: Iterable<number>
 ): boolean {
   return some(sudokuArray, (value) => value <= 0 || value > 9, indices);
+}
+
+export function isSubGridComplete(
+  sudokuArray: SudokuArray,
+  indices: Iterable<number>
+): boolean {
+  return !isSubGridIncomplete(sudokuArray, indices);
 }
 
 export function isInvalid(sudokuArray: SudokuArray) {
@@ -64,4 +71,8 @@ export function isIncomplete(sudokuArray: SudokuArray) {
   }
 
   return false;
+}
+
+export function isComplete(sudokuArray: SudokuArray): boolean {
+  return !isIncomplete(sudokuArray);
 }

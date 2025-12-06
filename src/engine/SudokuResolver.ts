@@ -2,7 +2,7 @@ import {
   getAllPossibleValues,
   getUniquePossibility,
   playSinglePossibilities,
-} from "../ai/utils";
+} from "./ai/utils";
 import type SudokuArray from "./SudokuArray";
 
 type SudokuResolverStateName = "idle" | "solving" | "solved" | "unsolvable";

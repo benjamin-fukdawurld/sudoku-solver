@@ -12,7 +12,7 @@ import {
 
 export function getSubGridIndexPossibilities(
   sudokuArray: SudokuArray,
-  generator: Generator<number, void, void>,
+  generator: Iterable<number>,
   index: number
 ): number {
   let flags = 0b111111111; // Bits 1-9 set to 1
@@ -103,7 +103,7 @@ export function getAllSinglePossibilities(
 export function getIndexUniquePossibilities(
   index: number,
   possibilities: ArrayLike<number>,
-  generator: Generator<number, void, void>
+  generator: Iterable<number>
 ): number {
   const targetFlags = possibilities[index];
   if (targetFlags === 0) {

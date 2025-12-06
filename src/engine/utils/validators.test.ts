@@ -6,8 +6,10 @@ import {
   isInvalid,
   isSolved,
   isSubGridIncomplete,
+  isSubGridComplete,
   isSubGridInvalid,
   isSubGridSolved,
+  isComplete,
 } from "./validators";
 
 describe("validators", () => {
@@ -198,9 +200,10 @@ describe("validators", () => {
     });
   });
 
-  describe("isSubGridIncomplete", () => {
+  describe("isSubGridIncomplete & isSubGridComplete", () => {
     it("should return true for an empty sudoku", () => {
       expect(isSubGridIncomplete(sudokuArray, rowIndexGenerator(0))).toBe(true);
+      expect(isSubGridComplete(sudokuArray, rowIndexGenerator(0))).toBe(false);
     });
 
     it("should return false for a complete sub-grid", () => {
@@ -218,6 +221,7 @@ describe("validators", () => {
       expect(isSubGridIncomplete(sudokuArray, rowIndexGenerator(0))).toBe(
         false
       );
+      expect(isSubGridComplete(sudokuArray, rowIndexGenerator(0))).toBe(true);
     });
 
     it("should return true for an incomplete sub-grid", () => {
@@ -383,9 +387,10 @@ describe("validators", () => {
     });
   });
 
-  describe("isIncomplete", () => {
+  describe("isIncomplete & isComplete", () => {
     it("should return true for an empty sudoku", () => {
       expect(isIncomplete(sudokuArray)).toBe(true);
+      expect(isComplete(sudokuArray)).toBe(false);
     });
 
     it("should return true for an incomplete sudoku", () => {
@@ -401,6 +406,7 @@ describe("validators", () => {
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
       ]);
       expect(isIncomplete(sudokuArray)).toBe(true);
+      expect(isComplete(sudokuArray)).toBe(false);
 
       sudokuArray.fill([
         [-1, 2, 3, 4, 5, 6, 7, 8, 9],

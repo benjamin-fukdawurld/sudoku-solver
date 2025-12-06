@@ -3,7 +3,7 @@ import "./App.css";
 import SudokuArray from "./engine/SudokuArray";
 import { SudokuContext } from "./SudokuContext";
 import Sudoku from "./components/Sudoku";
-import BackTracker from "./ai/BackTracker";
+import BackTracker from "./engine/ai/BackTracker";
 import { SelectionContext } from "./SelectionContext";
 import { Resolver } from "./components/Resolver/Resolver";
 

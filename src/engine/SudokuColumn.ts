@@ -1,52 +1,56 @@
+import SudokuArray from "./SudokuArray";
 import { type SudokuChecker, type SudokuSubGrid } from "./types";
 import {
-  isComplete,
-  isValid,
+  colIndexGenerator,
+  isSubGridComplete,
+  isSubGridSolved,
   missingCount,
   missingIndices,
   missingValues,
 } from "./utils";
 
 export default class SudokuColumn implements SudokuSubGrid, SudokuChecker {
-  private data: DataView;
-
+  public sudokuArray: SudokuArray;
   public colIndex: number;
 
-  constructor(buffer: ArrayBufferLike, colIndex: number) {
-    this.data = new DataView(buffer);
+  constructor(sudokuArray: SudokuArray, colIndex: number) {
+    this.sudokuArray = sudokuArray;
     this.colIndex = colIndex;
   }
 
   get(row: number): number {
-    return this.data.getInt8(row * 9 + this.colIndex);
+    return this.sudokuArray.at({ row, col: this.colIndex });
   }
 
   set(row: number, value: number): this {
-    this.data.setInt8(row * 9 + this.colIndex, value);
+    this.sudokuArray.update({ row, col: this.colIndex }, value);
     return this;
   }
 
   get indices(): number[] {
-    return Array.from({ length: 9 }).map((_, row) => row * 9 + this.colIndex);
+    return Array.from(colIndexGenerator(this.colIndex));
   }
 
   get isValid(): boolean {
-    return isValid(this);
+    return isSubGridSolved(this.sudokuArray, colIndexGenerator(this.colIndex));
   }
 
   get isComplete(): boolean {
-    return isComplete(this);
+    return isSubGridComplete(
+      this.sudokuArray,
+      colIndexGenerator(this.colIndex)
+    );
   }
 
   get missingValues(): number[] {
-    return missingValues(this);
+    return missingValues(this.sudokuArray, colIndexGenerator(this.colIndex));
   }
 
   get missingIndices(): number[] {
-    return missingIndices(this);
+    return missingIndices(this.sudokuArray, colIndexGenerator(this.colIndex));
   }
 
   get missingCount(): number {
-    return missingCount(this);
+    return missingCount(this.sudokuArray, colIndexGenerator(this.colIndex));
   }
 }

@@ -3,11 +3,14 @@ import SudokuRow from "./SudokuRow";
 import SudokuSquare from "./SudokuSquare";
 import { type SudokuChecker, type SudokuSubGrid } from "./types";
 import {
+  allIndicesGenerator,
   isComplete,
-  isValid,
+  isSolved,
   missingCount,
   missingIndices,
   missingValues,
+  rowColToSudokuIndex,
+  rowIndexGenerator,
 } from "./utils";
 
 export default class SudokuArray implements SudokuSubGrid, SudokuChecker {
@@ -57,53 +60,51 @@ export default class SudokuArray implements SudokuSubGrid, SudokuChecker {
   }
 
   at({ row, col }: { row: number; col: number }): number {
-    const index = row * 9 + col;
+    const index = rowColToSudokuIndex(row, col);
     return this.data[index];
   }
 
   update({ row, col }: { row: number; col: number }, value: number): this {
-    const index = row * 9 + col;
+    const index = rowColToSudokuIndex(row, col);
     this.data[index] = value;
     return this;
   }
 
   row(rowIndex: number): SudokuRow {
-    return new SudokuRow(this.data.buffer, rowIndex);
+    return new SudokuRow(this, rowIndex);
   }
 
   column(colIndex: number): SudokuColumn {
-    return new SudokuColumn(this.data.buffer, colIndex);
+    return new SudokuColumn(this, colIndex);
   }
 
   square(squareIndex: number): SudokuSquare {
-    return new SudokuSquare(this.data.buffer, squareIndex);
+    return new SudokuSquare(this, squareIndex);
   }
 
   get isValid(): boolean {
-    return [...Array(9)].every((_, i) => isValid(this.row(i)));
+    return isSolved(this);
   }
 
   get isComplete(): boolean {
-    return [...Array(9)].every((_, i) => isComplete(this.row(i)));
+    return isComplete(this);
   }
 
   get missingValues(): number[] {
     return Array.from(
-      new Set([...Array(9)].flatMap((_, i) => missingValues(this.row(i))))
+      new Set(
+        Array.from({ length: 9 }, (_, i) =>
+          missingValues(this, rowIndexGenerator(i))
+        ).flat()
+      )
     );
   }
 
   get missingIndices(): number[] {
-    return [...Array(9)]
-      .map((_, i) => missingIndices(this.row(i)))
-      .map((arr, row) => arr.map((col) => row * 9 + col))
-      .flat();
+    return missingIndices(this, allIndicesGenerator());
   }
 
   get missingCount(): number {
-    return [...Array(9)].reduce(
-      (sum, _, i) => sum + missingCount(this.row(i)),
-      0
-    );
+    return missingCount(this, allIndicesGenerator());
   }
 }
